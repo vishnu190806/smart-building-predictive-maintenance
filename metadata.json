@@ -1,0 +1,5 @@
+{
+  "name": "Aurora Building Health Dashboard",
+  "description": "A React + TypeScript predictive maintenance control room for smart buildings, featuring real-time sensor analysis and anomaly detection.",
+  "requestFramePermissions": []
+}
