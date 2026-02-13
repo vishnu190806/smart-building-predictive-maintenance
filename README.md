@@ -54,6 +54,7 @@ The project combines a ⚡ FastAPI backend with 🤖 scikit‑learn models and a
 
 ## 🗂 Project Structure
 
+```bash
 ├─ data/
 │ ├─ ai4i_training_phys.csv # unsupervised training data
 │ └─ ai4i2020.csv # supervised training data
@@ -84,6 +85,7 @@ The project combines a ⚡ FastAPI backend with 🤖 scikit‑learn models and a
 ├─ constants.ts # API base URL & config
 ├─ styles/theme.css # CSS variables for Light/Dark modes
 └─ ...
+```
 
 ---
 
