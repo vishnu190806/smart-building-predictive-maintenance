@@ -15,6 +15,7 @@ FEATURE_COLUMNS = [
 MODEL_DIR = "models"
 MODEL_PATH = os.path.join(MODEL_DIR, "isolation_forest.pkl")
 SCALER_PATH = os.path.join(MODEL_DIR, "scaler.pkl")
+SUPERVISED_MODEL_PATH = os.path.join(MODEL_DIR, "rf_supervised.pkl")
 
 
 def train_and_save_model(
@@ -43,10 +44,20 @@ def train_and_save_model(
 
 
 def load_model() -> tuple[IsolationForest, StandardScaler]:
-    model: IsolationForest = joblib.load(MODEL_PATH)
-    scaler: StandardScaler = joblib.load(SCALER_PATH)
-    return model, scaler
+    try:
+        model: IsolationForest = joblib.load(MODEL_PATH)
+        scaler: StandardScaler = joblib.load(SCALER_PATH)
+        return model, scaler
+    except FileNotFoundError:
+        print("Model files not found. Training new model...")
+        return train_and_save_model()
 
+def load_supervised_model() -> Any:
+    try:
+        return joblib.load(SUPERVISED_MODEL_PATH)
+    except FileNotFoundError:
+        print("Supervised model not found.")
+        return None
 
 def _validate_and_prepare_features(reading: dict[str, Any]) -> np.ndarray:
     for col in FEATURE_COLUMNS:
@@ -67,7 +78,33 @@ def predict_single(
     X_scaled = scaler.transform(X)
     score = model.decision_function(X_scaled)[0]
     pred = model.predict(X_scaled)[0]
-    return {"is_anomaly": int(pred == -1), "anomaly_score": float(score)}
+    print(f"DEBUG: Input={reading}")
+    print(f"DEBUG: Scaled={X_scaled}")
+    print(f"DEBUG: Score={score}, Pred={pred}")
+    return {"is_anomaly": int(pred == -1), "anomaly_score": float(score), "model": "Isolation Forest"}
+
+def predict_supervised_single(
+    reading: dict[str, Any],
+    model: Any | None = None,
+) -> dict[str, Any]:
+    if model is None:
+        model = load_supervised_model()
+        if model is None:
+             return {"error": "Supervised model not available"}
+    
+    X = _validate_and_prepare_features(reading)
+    # RF model was trained on raw features in supervised_train.py
+    pred = model.predict(X)[0]
+    probs = model.predict_proba(X)[0] 
+    
+    # Class 1 is failure, Class 0 is normal
+    failure_prob = probs[1] if len(probs) > 1 else 0.0
+    
+    return {
+        "is_anomaly": int(pred), # 1 per original training means failure
+        "anomaly_score": float(failure_prob),
+        "model": "Random Forest"
+    }
 
 
 def predict_batch(
@@ -93,6 +130,8 @@ def predict_batch(
 if __name__ == "__main__":
     default_csv = os.path.join("data", "ai4i_training_phys.csv")
     model, scaler = train_and_save_model(default_csv)
+    rf_model = load_supervised_model()
+
     sample_normal = {
         "Rotational speed [rpm]": 1500.0,
         "Process temperature [K]": 310.0,
@@ -100,7 +139,10 @@ if __name__ == "__main__":
         "Tool wear [min]": 50.0,
     }
     print("Normal-like:", sample_normal)
-    print("Prediction:", predict_single(sample_normal, model, scaler))
+    print("IF Prediction:", predict_single(sample_normal, model, scaler))
+    if rf_model:
+        print("RF Prediction:", predict_supervised_single(sample_normal, rf_model))
+
     sample_faulty = {
         "Rotational speed [rpm]": 3000.0,
         "Process temperature [K]": 340.0,
@@ -108,4 +150,6 @@ if __name__ == "__main__":
         "Tool wear [min]": 250.0,
     }
     print("Faulty-like:", sample_faulty)
-    print("Prediction:", predict_single(sample_faulty, model, scaler))
+    print("IF Prediction:", predict_single(sample_faulty, model, scaler))
+    if rf_model:
+        print("RF Prediction:", predict_supervised_single(sample_faulty, rf_model))

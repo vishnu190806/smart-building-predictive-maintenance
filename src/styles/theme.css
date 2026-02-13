@@ -1,0 +1,85 @@
+:root {
+  /* =========================================
+     AURORA THEME PALETTE
+     ========================================= */
+  
+  /* Backgrounds */
+  --bg-deep: #0a0a0f;
+  --bg-panel: #13131f;
+  
+  /* Accents */
+  --color-primary: #00f3ff;   /* Neon Cyan */
+  --color-secondary: #7000ff; /* Deep Violet */
+  --color-success: #00ff9d;   /* Cyber Green */
+  --color-warning: #ffbd2e;   /* Amber */
+  --color-danger: #ff2e5c;    /* Fluorescent Red */
+  
+  /* Text */
+  --text-main: #ffffff;
+  --text-muted: #94a3b8;
+  --text-dim: #475569;
+
+  /* Glassmorphism Configuration */
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-blur: 12px;
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
+
+  /* Spacing & Radius */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+  --transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-theme='light'] {
+  /* Light Mode Overrides */
+  --bg-deep: #f0f4f9;
+  --bg-panel: #ffffff;
+  
+  --text-main: #1a1c1e;
+  --text-muted: #64748b;
+  --text-dim: #94a3b8;
+
+  --glass-bg: rgba(255, 255, 255, 0.65);
+  --glass-border: rgba(0, 0, 0, 0.05); /* Darker border for visibility */
+  --glass-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.05);
+
+  --color-primary: #00bcd4; /* Darker Cyan for white bg */
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-deep);
+  background-image: 
+    radial-gradient(circle at 15% 50%, rgba(112, 0, 255, 0.08), transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(0, 243, 255, 0.05), transparent 25%);
+  color: var(--text-main);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Utility Class for Glass Effect */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: var(--radius-md);
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
