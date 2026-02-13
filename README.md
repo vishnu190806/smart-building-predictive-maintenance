@@ -23,8 +23,12 @@ The project combines a ⚡ FastAPI backend with 🤖 scikit‑learn models and a
   - 🧩 “System insight” recommendation text that changes with risk level.
 - 📈 **History visualization**
   - Per‑asset sparkline chart showing recent anomaly/failure scores.
-- 🔁 **Mode toggle**
-  - 🟣 Anomaly mode (unsupervised) vs 🟠 Failure mode (supervised) with explanation tooltip.
+  - 📊 **Live Dashboard Chart**: Real-time scrolling chart for building energy consumption.
+- 🎨 **Enhanced UI/UX**
+  - 🌗 **Light/Dark Mode**: Fully adaptive themes (Aurora Dark & Crisp Light) with glassmorphism.
+  - 🔍 **Global Search**: "Quick Look" modal to find systems (e.g., "HVAC", "Pump") instantly.
+  - 🔔 **Notifications**: Dropdown for recent building alerts and system updates.
+  - ℹ️ **About Page**: Dedicated team section for **TEAM-A02**.
 - 🔌 **Status feedback**
   - API health pill (🟢 CONNECTED / 🔴 DISCONNECTED).
   - Asset cards with 💤 NOT CHECKED / ✅ HEALTHY / ⚠️ ANOMALY states.
@@ -36,6 +40,8 @@ The project combines a ⚡ FastAPI backend with 🤖 scikit‑learn models and a
 - **Frontend**
   - ⚛️ React + TypeScript (Vite)
   - 🎨 Custom CSS (glassmorphism, gradients, responsive layout)
+  - 📊 Recharts (for data visualization)
+  - 🔦 Lucide React (for iconography)
 - **Backend**
   - 🧩 FastAPI
   - 🤖 scikit‑learn (IsolationForest, RandomForestClassifier)
@@ -61,9 +67,22 @@ The project combines a ⚡ FastAPI backend with 🤖 scikit‑learn models and a
 │ ├─ supervised_train.py # trains RandomForest failure model
 │ ├─ compare_models.py # offline comparison of both models
 │ └─ evaluate_model.py # IsolationForest evaluation script
-├─ App.tsx # main React dashboard
+│ └─ simulation_service.py # Real-time data simulation
+├─ frontend/src/
+│ ├─ App.tsx # main React dashboard
+│ ├─ pages/
+│ │ ├─ Dashboard.tsx # Overview with charts and stats
+│ │ ├─ About.tsx # Team A02 information page
+│ │ └─ ...
+│ ├─ components/
+│ │ ├─ layout/
+│ │ │ ├─ Header.tsx # Search, Theme Toggle, Notifications
+│ │ │ └─ Sidebar.tsx # Navigation
+│ │ └─ ui/
+│ │   ├─ GlassCard.tsx # Reusable glass container
+│ │   └─ StatMetric.tsx # Dashboard metric component
 ├─ constants.ts # API base URL & config
-├─ App.css # UI styles
+├─ styles/theme.css # CSS variables for Light/Dark modes
 └─ ...
 
 ---
@@ -183,6 +202,8 @@ Open the Vite URL (usually http://localhost:5173) in your browser.
    - Health status, risk score, and system insight update.
    - The history chart plots the new score for that asset.
 5. Try normal vs extreme values to see how the risk and recommendations respond.
+6. **Use the Theme Toggle** (Sun/Moon) to switch between Light and Dark modes.
+7. **Use Search** (Command/Ctrl + K or click) to find "HVAC" or "Pump".
 
 ---
 
