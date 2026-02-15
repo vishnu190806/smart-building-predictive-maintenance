@@ -120,9 +120,9 @@ def predict(
         is_anomaly = result["is_anomaly"]
         anomaly_score = result["anomaly_score"]
     else:  # supervised
-        fail_scaled = SCALER.transform(features)  # reuse your scaler
-        is_anomaly = int(RF_MODEL.predict(fail_scaled)[0])
-        anomaly_score = float(RF_MODEL.predict_proba(fail_scaled)[0][1])
+        # RF model was trained on unscaled features
+        is_anomaly = int(RF_MODEL.predict(features)[0])
+        anomaly_score = float(RF_MODEL.predict_proba(features)[0][1])
 
     # ---------- NEW: K-MEANS CLUSTERING (operating mode) ----------
     kmeans_scaled = KMEANS_SCALER.transform(features)
