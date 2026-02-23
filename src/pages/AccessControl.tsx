@@ -75,8 +75,8 @@ export const AccessControl = () => {
       <div className="px-8 mt-8 grid grid-cols-1 md:grid-cols-4 gap-6">
         <GlassCard className="flex items-center justify-between">
           <div>
-            <p className="text-gray-400 text-xs uppercase">Total Entries</p>
-            <h3 className="text-2xl font-bold mt-1 text-white">
+            <p className="text-[var(--text-muted)] text-xs uppercase">Total Entries</p>
+            <h3 className="text-2xl font-bold mt-1 text-[var(--text-main)]">
               {stats ? stats.total_entries : '-'}
             </h3>
           </div>
@@ -95,8 +95,8 @@ export const AccessControl = () => {
 
         <GlassCard className="flex items-center justify-between">
           <div>
-            <p className="text-gray-400 text-xs uppercase">Active Doors</p>
-            <h3 className="text-2xl font-bold mt-1 text-white">
+            <p className="text-[var(--text-muted)] text-xs uppercase">Active Doors</p>
+            <h3 className="text-2xl font-bold mt-1 text-[var(--text-main)]">
               {stats ? stats.active_doors : '-'}
             </h3>
           </div>
@@ -105,8 +105,8 @@ export const AccessControl = () => {
 
         <GlassCard className="flex items-center justify-between">
           <div>
-            <p className="text-gray-400 text-xs uppercase">System Status</p>
-            <h3 className="text-2xl font-bold mt-1 text-white">
+            <p className="text-[var(--text-muted)] text-xs uppercase">System Status</p>
+            <h3 className="text-2xl font-bold mt-1 text-[var(--text-main)]">
               {loading ? 'Syncing...' : 'Online'}
             </h3>
           </div>
@@ -119,7 +119,7 @@ export const AccessControl = () => {
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-[rgba(255,255,255,0.05)] text-gray-400 text-sm">
+                <tr className="border-b border-[var(--glass-border)] text-[var(--text-muted)] text-sm">
                   <th className="p-3">User</th>
                   <th className="p-3">Role</th>
                   <th className="p-3">Location</th>
@@ -130,14 +130,14 @@ export const AccessControl = () => {
               </thead>
               <tbody>
                 {logs.map((log) => (
-                  <tr key={log.Log_ID} className="border-b border-[rgba(255,255,255,0.02)] hover:bg-[rgba(255,255,255,0.03)] transition-colors">
-                    <td className="p-3 font-medium text-white">{log.User_Name}</td>
+                  <tr key={log.Log_ID} className="border-b border-[var(--glass-border)] hover:bg-[var(--glass-bg)] transition-colors">
+                    <td className="p-3 font-medium text-[var(--text-main)]">{log.User_Name}</td>
                     <td className="p-3">
-                      <span className="px-2 py-1 rounded text-xs bg-[rgba(255,255,255,0.05)] text-gray-300">{log.Role}</span>
+                      <span className="px-2 py-1 rounded text-xs bg-[var(--glass-bg)] border border-[var(--glass-border)] text-[var(--text-muted)]">{log.Role}</span>
                     </td>
-                    <td className="p-3 text-gray-400">{log.Door_Location}</td>
-                    <td className="p-3 text-gray-500 text-xs uppercase">{log.Door_Zone}</td>
-                    <td className="p-3 font-mono text-xs text-gray-500">{log.Access_Time}</td>
+                    <td className="p-3 text-[var(--text-muted)]">{log.Door_Location}</td>
+                    <td className="p-3 text-[var(--text-muted)] text-xs uppercase">{log.Door_Zone}</td>
+                    <td className="p-3 font-mono text-xs text-[var(--text-muted)]">{log.Access_Time}</td>
                     <td className="p-3">
                       <StatusBadge 
                         status={log.Access_Status === 'Granted' ? 'success' : 'danger'} 
@@ -148,7 +148,7 @@ export const AccessControl = () => {
                 ))}
                 {logs.length === 0 && !loading && (
                    <tr>
-                     <td colSpan={6} className="p-8 text-center text-gray-500">No logs found.</td>
+                     <td colSpan={6} className="p-8 text-center text-[var(--text-muted)]">No logs found.</td>
                    </tr>
                 )}
               </tbody>

@@ -35,6 +35,19 @@ export const Reports = () => {
     }
   };
 
+  const handleDownload = (report: any) => {
+    const headers = "ID,Report Name,Date Generated,Type,Status";
+    const row = `${report.id},${report.name},${report.date},${report.type},${report.status}`;
+    const csvContent = "data:text/csv;charset=utf-8," + headers + "\n" + row;
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `${report.name.replace(/\s+/g, '_')}_${report.date}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="pb-8">
       <Header pageTitle="System Reports" />
@@ -55,7 +68,7 @@ export const Reports = () => {
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-[rgba(255,255,255,0.05)] text-gray-400 text-sm uppercase tracking-wider">
+                <tr className="border-b border-[var(--glass-border)] text-[var(--text-muted)] text-sm uppercase tracking-wider">
                   <th className="p-4">Report Name</th>
                   <th className="p-4">Date Generated</th>
                   <th className="p-4">Type</th>
@@ -63,23 +76,23 @@ export const Reports = () => {
                   <th className="p-4 text-right">Action</th>
                 </tr>
               </thead>
-              <tbody className="text-gray-300 divide-y divide-[rgba(255,255,255,0.05)]">
+              <tbody className="text-[var(--text-dim)] divide-y divide-[var(--glass-border)]">
                 {reports.map((report) => (
-                  <tr key={report.id} className="hover:bg-[rgba(255,255,255,0.02)] transition-colors">
+                  <tr key={report.id} className="hover:bg-[var(--glass-bg)] transition-colors">
                     <td className="p-4">
                       <div className="flex items-center gap-3">
-                        <div className="p-2 rounded bg-[rgba(255,255,255,0.05)] text-[var(--color-primary)]">
+                        <div className="p-2 rounded bg-[var(--glass-bg)] text-[var(--color-primary)]">
                           <FileText size={18} />
                         </div>
                         <div>
-                          <p className="font-medium text-white">{report.name}</p>
-                          <p className="text-xs text-gray-500">{report.id}</p>
+                          <p className="font-medium text-[var(--text-main)]">{report.name}</p>
+                          <p className="text-xs text-[var(--text-muted)]">{report.id}</p>
                         </div>
                       </div>
                     </td>
-                    <td className="p-4">{report.date}</td>
+                    <td className="p-4 text-[var(--text-main)]">{report.date}</td>
                     <td className="p-4">
-                      <span className="px-2 py-1 rounded text-xs bg-[rgba(255,255,255,0.1)] border border-[rgba(255,255,255,0.1)] font-mono">
+                      <span className="px-2 py-1 rounded text-xs bg-[var(--glass-bg)] border border-[var(--glass-border)] font-mono text-[var(--text-dim)]">
                         {report.type}
                       </span>
                     </td>
@@ -96,7 +109,11 @@ export const Reports = () => {
                       </div>
                     </td>
                     <td className="p-4 text-right">
-                      <button className="p-2 rounded hover:bg-[rgba(255,255,255,0.1)] text-gray-400 hover:text-white transition-colors">
+                      <button 
+                        onClick={() => handleDownload(report)}
+                        className="p-2 rounded hover:bg-[var(--glass-bg)] text-[var(--text-muted)] hover:text-[var(--text-main)] transition-colors"
+                        title="Download CSV"
+                      >
                         <Download size={18} />
                       </button>
                     </td>
@@ -114,14 +131,14 @@ export const Reports = () => {
                 <AlertTriangle className="text-[var(--color-danger)]" size={24} />
                 <div>
                   <h4 className="text-[var(--color-danger)] font-bold">Critical Error Detected</h4>
-                  <p className="text-sm text-gray-300">HVAC Unit 3 compressor failure predicted.</p>
+                  <p className="text-sm text-[var(--text-main)]">HVAC Unit 3 compressor failure predicted.</p>
                 </div>
               </div>
               <div className="flex items-center gap-4 p-4 rounded bg-[rgba(255,189,46,0.1)] border border-[var(--color-warning)]">
                 <AlertTriangle className="text-[var(--color-warning)]" size={24} />
                 <div>
                   <h4 className="text-[var(--color-warning)] font-bold">Maintenance Overdue</h4>
-                  <p className="text-sm text-gray-300">Elevator Bank B inspection required.</p>
+                  <p className="text-sm text-[var(--text-main)]">Elevator Bank B inspection required.</p>
                 </div>
               </div>
             </div>
@@ -131,19 +148,19 @@ export const Reports = () => {
             <div className="space-y-6">
               <div>
                 <div className="flex justify-between text-sm mb-2">
-                  <span className="text-gray-400">Log Database</span>
-                  <span className="text-white">45 GB / 100 GB</span>
+                  <span className="text-[var(--text-muted)]">Log Database</span>
+                  <span className="text-[var(--text-main)]">45 GB / 100 GB</span>
                 </div>
-                <div className="h-2 rounded-full bg-[rgba(255,255,255,0.1)] overflow-hidden">
+                <div className="h-2 rounded-full bg-[var(--glass-bg)] overflow-hidden">
                   <div className="h-full bg-[var(--color-primary)] w-[45%]" />
                 </div>
               </div>
               <div>
                 <div className="flex justify-between text-sm mb-2">
-                  <span className="text-gray-400">Video Archives</span>
-                  <span className="text-white">880 GB / 2 TB</span>
+                  <span className="text-[var(--text-muted)]">Video Archives</span>
+                  <span className="text-[var(--text-main)]">880 GB / 2 TB</span>
                 </div>
-                <div className="h-2 rounded-full bg-[rgba(255,255,255,0.1)] overflow-hidden">
+                <div className="h-2 rounded-full bg-[var(--glass-bg)] overflow-hidden">
                   <div className="h-full bg-[var(--color-secondary)] w-[44%]" />
                 </div>
               </div>

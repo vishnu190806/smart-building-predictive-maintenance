@@ -182,7 +182,7 @@ python -m src.supervised_train
 
 ### 3️⃣ Start the backend
 
-uvicorn src.api:app --reload
+uvicorn src.main:app --reload
 
 The API will run at http://127.0.0.1:8000.
 
@@ -190,7 +190,7 @@ The API will run at http://127.0.0.1:8000.
 
 npm run dev
 
-Open the Vite URL (usually http://localhost:5173) in your browser.
+Open the Vite URL (usually http://localhost:3000) in your browser.
 
 ---
 

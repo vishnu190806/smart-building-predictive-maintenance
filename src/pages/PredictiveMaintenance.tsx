@@ -11,6 +11,16 @@ export const PredictiveMaintenance = () => {
     tool_wear: 0
   });
 
+  interface HistoryItem {
+    id: number;
+    timestamp: string;
+    model: string;
+    status: string;
+    confidence: number;
+  }
+
+  const [history, setHistory] = useState<HistoryItem[]>([]);
+
   const [modelType, setModelType] = useState<'isolation_forest' | 'random_forest'>('isolation_forest');
   const [result, setResult] = useState<{ is_anomaly: number; anomaly_score: number; model?: string } | null>(null);
   const [loading, setLoading] = useState(false);
@@ -38,6 +48,16 @@ export const PredictiveMaintenance = () => {
       if (!response.ok) throw new Error('Prediction failed');
       const data = await response.json();
       setResult(data);
+      
+      // Add to history
+      const newItem: HistoryItem = {
+        id: Date.now(),
+        timestamp: new Date().toLocaleTimeString(),
+        model: modelType === 'isolation_forest' ? 'Isolation Forest' : 'Random Forest',
+        status: data.is_anomaly ? 'Anomaly Detected' : 'Optimal',
+        confidence: data.anomaly_score
+      };
+      setHistory(prev => [newItem, ...prev]);
     } catch (err) {
       setError('System Offline or API Error');
     } finally {
@@ -55,7 +75,7 @@ export const PredictiveMaintenance = () => {
           <form onSubmit={handlePredict} className="space-y-6">
             
             {/* Model Selection */}
-            <div className="p-4 rounded-lg bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.1)]">
+            <div className="p-4 rounded-lg bg-[var(--glass-bg)] border border-[var(--glass-border)]">
               <label className="flex items-center gap-2 text-[var(--color-primary)] text-sm font-bold mb-3 uppercase tracking-wider">
                 <Cpu size={16} /> AI Model Selection
               </label>
@@ -68,7 +88,7 @@ export const PredictiveMaintenance = () => {
                     onChange={() => setModelType('isolation_forest')}
                     className="accent-[var(--color-primary)]"
                   />
-                  <span className={`text-sm ${modelType === 'isolation_forest' ? 'text-white' : 'text-gray-400'}`}>
+                  <span className={`text-sm ${modelType === 'isolation_forest' ? 'text-[var(--text-main)]' : 'text-[var(--text-muted)]'}`}>
                     Anomaly Detection <span className="text-xs opacity-50">(Isolation Forest)</span>
                   </span>
                 </label>
@@ -80,7 +100,7 @@ export const PredictiveMaintenance = () => {
                     onChange={() => setModelType('random_forest')}
                     className="accent-[var(--color-primary)]"
                   />
-                  <span className={`text-sm ${modelType === 'random_forest' ? 'text-white' : 'text-gray-400'}`}>
+                  <span className={`text-sm ${modelType === 'random_forest' ? 'text-[var(--text-main)]' : 'text-[var(--text-muted)]'}`}>
                     Failure Classification <span className="text-xs opacity-50">(Random Forest)</span>
                   </span>
                 </label>
@@ -89,50 +109,50 @@ export const PredictiveMaintenance = () => {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="flex items-center gap-2 text-gray-400 text-sm mb-2">
+                <label className="flex items-center gap-2 text-[var(--text-muted)] text-sm mb-2">
                   <RotateCw size={16} /> Speed (RPM)
                 </label>
                 <input 
                   type="number" 
                   value={formData.rotational_speed}
                   onChange={(e) => setFormData({...formData, rotational_speed: Number(e.target.value)})}
-                  className="w-full bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] rounded p-3 text-white focus:border-[var(--color-primary)] outline-none"
+                  className="w-full bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded p-3 text-[var(--text-main)] focus:border-[var(--color-primary)] outline-none"
                 />
               </div>
 
               <div>
-                <label className="flex items-center gap-2 text-gray-400 text-sm mb-2">
+                <label className="flex items-center gap-2 text-[var(--text-muted)] text-sm mb-2">
                   <Thermometer size={16} /> Temp (K)
                 </label>
                 <input 
                   type="number" 
                   value={formData.temperature}
                   onChange={(e) => setFormData({...formData, temperature: Number(e.target.value)})}
-                  className="w-full bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] rounded p-3 text-white focus:border-[var(--color-primary)] outline-none"
+                  className="w-full bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded p-3 text-[var(--text-main)] focus:border-[var(--color-primary)] outline-none"
                 />
               </div>
 
               <div>
-                <label className="flex items-center gap-2 text-gray-400 text-sm mb-2">
+                <label className="flex items-center gap-2 text-[var(--text-muted)] text-sm mb-2">
                   <Activity size={16} /> Torque (Nm)
                 </label>
                 <input 
                   type="number" 
                   value={formData.torque}
                   onChange={(e) => setFormData({...formData, torque: Number(e.target.value)})}
-                  className="w-full bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] rounded p-3 text-white focus:border-[var(--color-primary)] outline-none"
+                  className="w-full bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded p-3 text-[var(--text-main)] focus:border-[var(--color-primary)] outline-none"
                 />
               </div>
 
               <div>
-                <label className="flex items-center gap-2 text-gray-400 text-sm mb-2">
+                <label className="flex items-center gap-2 text-[var(--text-muted)] text-sm mb-2">
                   <Wrench size={16} /> Wear (min)
                 </label>
                 <input 
                   type="number" 
                   value={formData.tool_wear}
                   onChange={(e) => setFormData({...formData, tool_wear: Number(e.target.value)})}
-                  className="w-full bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] rounded p-3 text-white focus:border-[var(--color-primary)] outline-none"
+                  className="w-full bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded p-3 text-[var(--text-main)] focus:border-[var(--color-primary)] outline-none"
                 />
               </div>
             </div>
@@ -158,7 +178,7 @@ export const PredictiveMaintenance = () => {
                     <h3 className="text-2xl font-bold text-[var(--color-danger)]">
                       {result.model === 'Random Forest' ? 'Machine Failure Predicted' : 'Anomaly Detected'}
                     </h3>
-                    <p className="text-gray-300 mt-2">
+                    <p className="text-[var(--text-muted)] mt-2">
                       {result.model === 'Random Forest' 
                         ? 'The model predicts a high probability of equipment failure.' 
                         : 'Equipment is behaving abnormally compared to historical data.'}
@@ -168,24 +188,24 @@ export const PredictiveMaintenance = () => {
                   <>
                     <CheckCircle size={64} className="mx-auto text-[var(--color-success)] mb-4" />
                     <h3 className="text-2xl font-bold text-[var(--color-success)]">System Optimal</h3>
-                    <p className="text-gray-300 mt-2">No issues detected. Equipment operating within normal parameters.</p>
+                    <p className="text-[var(--text-muted)] mt-2">No issues detected. Equipment operating within normal parameters.</p>
                   </>
                 )}
-                <div className="mt-6 pt-6 border-t border-[rgba(255,255,255,0.1)] grid grid-cols-2 gap-4">
+                <div className="mt-6 pt-6 border-t border-[var(--glass-border)] grid grid-cols-2 gap-4">
                   <div>
-                    <span className="text-sm text-gray-500 block">Model Used</span>
-                    <span className="font-mono text-white text-sm">{result.model || 'Unknown'}</span>
+                    <span className="text-sm text-[var(--text-muted)] block">Model Used</span>
+                    <span className="font-mono text-[var(--text-main)] text-sm">{result.model || 'Unknown'}</span>
                   </div>
                   <div>
-                    <span className="text-sm text-gray-500 block">
+                    <span className="text-sm text-[var(--text-muted)] block">
                       {result.model === 'Random Forest' ? 'Failure Probability' : 'Anomaly Score'}
                     </span>
-                    <span className="font-mono text-white text-xl">{result.anomaly_score.toFixed(4)}</span>
+                    <span className="font-mono text-[var(--text-main)] text-xl">{result.anomaly_score.toFixed(4)}</span>
                   </div>
                 </div>
               </div>
             ) : (
-              <div className="h-full flex flex-col items-center justify-center text-gray-500 min-h-[300px]">
+              <div className="h-full flex flex-col items-center justify-center text-[var(--text-muted)] min-h-[300px]">
                 <Activity size={48} className="mb-4 opacity-20" />
                 <p>Select a model and enter readings.</p>
               </div>
@@ -197,6 +217,51 @@ export const PredictiveMaintenance = () => {
             )}
           </GlassCard>
         </div>
+      </div>
+
+      {/* History Section */}
+      <div className="px-8 mt-8">
+        <GlassCard title="Recent Diagnostic Logs">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b border-[var(--glass-border)] text-[var(--text-muted)] text-sm">
+                  <th className="p-3">Time</th>
+                  <th className="p-3">Model</th>
+                  <th className="p-3">Status</th>
+                  <th className="p-3">Confidence Score</th>
+                </tr>
+              </thead>
+              <tbody>
+                {history.map((item) => (
+                  <tr key={item.id} className="border-b border-[var(--glass-border)] hover:bg-[var(--glass-bg)] transition-colors">
+                    <td className="p-3 font-mono text-sm text-[var(--text-main)]">{item.timestamp}</td>
+                    <td className="p-3 text-[var(--text-main)]">{item.model}</td>
+                    <td className="p-3">
+                      <span className={`px-2 py-1 rounded text-xs border ${
+                        item.status === 'Anomaly Detected' 
+                          ? 'bg-[rgba(239,68,68,0.1)] border-[var(--color-danger)] text-[var(--color-danger)]' 
+                          : 'bg-[rgba(16,185,129,0.1)] border-[var(--color-success)] text-[var(--color-success)]'
+                      }`}>
+                        {item.status}
+                      </span>
+                    </td>
+                    <td className="p-3 font-mono text-[var(--text-main)]">
+                      {(item.confidence * 100).toFixed(1)}%
+                    </td>
+                  </tr>
+                ))}
+                {history.length === 0 && (
+                  <tr>
+                    <td colSpan={4} className="p-6 text-center text-[var(--text-muted)]">
+                      No diagnostics run in this session yet.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </GlassCard>
       </div>
     </div>
   );

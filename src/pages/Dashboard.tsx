@@ -106,7 +106,7 @@ export const Dashboard = ({ onNavigate }: DashboardProps) => {
               <div key={i} className="flex items-center justify-between p-3 rounded-lg hover:bg-[var(--glass-border)] transition-colors">
                 <div className="flex items-center gap-3">
                   <div className={`w-2 h-2 rounded-full ${i === 2 ? 'bg-[var(--color-warning)] shadow-[0_0_8px_var(--color-warning)]' : 'bg-[var(--color-success)] shadow-[0_0_8px_var(--color-success)]'}`}></div>
-                  <span className="text-sm font-medium">{item}</span>
+                  <span className="text-sm font-medium text-[var(--text-main)]">{item}</span>
                 </div>
                 <span className={`text-xs px-2 py-1 rounded bg-[var(--glass-border)] ${i === 2 ? 'text-[var(--color-warning)]' : 'text-[var(--color-success)]'}`}>
                   {i === 2 ? 'Maintenance' : 'Optimal'}

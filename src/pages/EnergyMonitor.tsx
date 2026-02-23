@@ -24,6 +24,7 @@ export const EnergyMonitor = () => {
     { name: 'Lighting', value: 210 },
     { name: 'Server Room', value: 380 },
     { name: 'Elevators', value: 120 },
+    { name: 'Water Systems', value: 95 },
   ];
   return (
     <div className="pb-8">
@@ -37,8 +38,8 @@ export const EnergyMonitor = () => {
                     <Zap size={24} />
                 </div>
                 <div>
-                    <p className="text-sm text-gray-400">Current Load</p>
-                    <h3 className="text-2xl font-bold text-white">452 kWh</h3>
+                    <p className="text-sm text-[var(--text-muted)]">Current Load</p>
+                    <h3 className="text-2xl font-bold text-[var(--text-main)]">452 kWh</h3>
                 </div>
             </div>
         </GlassCard>
@@ -48,8 +49,8 @@ export const EnergyMonitor = () => {
                     <Clock size={24} />
                 </div>
                 <div>
-                    <p className="text-sm text-gray-400">Peak Hours</p>
-                    <h3 className="text-2xl font-bold text-white">09:00 - 18:00</h3>
+                    <p className="text-sm text-[var(--text-muted)]">Peak Hours</p>
+                    <h3 className="text-2xl font-bold text-[var(--text-main)]">09:00 - 18:00</h3>
                 </div>
             </div>
         </GlassCard>
@@ -59,8 +60,8 @@ export const EnergyMonitor = () => {
                     <Users size={24} />
                 </div>
                 <div>
-                    <p className="text-sm text-gray-400">Occupancy Impact</p>
-                    <h3 className="text-2xl font-bold text-white">High Correlation</h3>
+                    <p className="text-sm text-[var(--text-muted)]">Occupancy Impact</p>
+                    <h3 className="text-2xl font-bold text-[var(--text-main)]">High Correlation</h3>
                 </div>
             </div>
         </GlassCard>
@@ -78,12 +79,12 @@ export const EnergyMonitor = () => {
                     <stop offset="95%" stopColor="#facd05" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                <XAxis dataKey="time" stroke="#666" />
-                <YAxis stroke="#666" />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--glass-border)" />
+                <XAxis dataKey="time" stroke="var(--text-muted)" />
+                <YAxis stroke="var(--text-muted)" />
                 <Tooltip 
-                  contentStyle={{ backgroundColor: '#0f0f15', borderColor: '#333' }}
-                  itemStyle={{ color: '#fff' }}
+                  contentStyle={{ backgroundColor: 'var(--bg-panel)', borderColor: 'var(--glass-border)' }}
+                  itemStyle={{ color: 'var(--text-main)' }}
                 />
                 <Legend />
                 <Area type="monotone" dataKey="load" stroke="#facd05" fillOpacity={1} fill="url(#colorLoad)" name="Energy (kWh)" />
@@ -98,18 +99,18 @@ export const EnergyMonitor = () => {
           <div className="h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={peakData} layout="vertical">
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" horizontal={false} />
-                <XAxis type="number" stroke="#666" />
-                <YAxis dataKey="name" type="category" stroke="#fff" width={100} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--glass-border)" horizontal={false} />
+                <XAxis type="number" stroke="var(--text-muted)" />
+                <YAxis dataKey="name" type="category" stroke="var(--text-main)" width={100} />
                 <Tooltip 
-                  cursor={{fill: 'rgba(255,255,255,0.05)'}}
-                  contentStyle={{ backgroundColor: '#0f0f15', borderColor: '#333' }}
-                  itemStyle={{ color: '#fff' }}
+                  cursor={{fill: 'var(--glass-bg)'}}
+                  contentStyle={{ backgroundColor: 'var(--bg-panel)', borderColor: 'var(--glass-border)' }}
+                  itemStyle={{ color: 'var(--text-main)' }}
                 />
                 <Bar dataKey="value" fill="#8884d8">
                     {
                         peakData.map((entry, index) => (
-                            <cell key={`cell-${index}`} fill={['#facd05', '#00f3ff', '#ff0055', '#bb00ff'][index % 4]} />
+                            <cell key={`cell-${index}`} fill={['#facd05', '#00f3ff', '#ff0055', '#bb00ff', '#00ff9d'][index % 5]} />
                         ))
                     }
                 </Bar>
