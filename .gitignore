@@ -34,3 +34,8 @@ venv/
 # Python Cache
 __pycache__/
 *.pyc
+
+# Databases
+*.db
+*.sqlite
+*.sqlite3
